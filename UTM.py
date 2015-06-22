@@ -22,6 +22,7 @@ class UTM:
         self.run()
     
     def run(self):
+        print(self.tape)
         self.halted = False
         while(not self.halted):
             try:
