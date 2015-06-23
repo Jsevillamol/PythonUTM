@@ -45,4 +45,4 @@ The machine is considered to have made a concrete output when it finishes in a v
 2. Every number in the output is expressed in monadic notation separated by blanks.
 
 #References
-* Boolos, G, Burges J, Jeffrey R. *Computability and Logic, fifth edition*.
+* Boolos G, Burges J, Jeffrey R. *Computability and Logic, fifth edition*.
