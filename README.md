@@ -43,3 +43,6 @@ When no instruction is found for the corresponding pair state data, the machine 
 The machine is considered to have made a concrete output when it finishes in a valid position. That is:
 1. The cursor is over the left-most 1.
 2. Every number in the output is expressed in monadic notation separated by blanks.
+
+#References
+* Boolos, G, Burges J, Jeffrey R. *Computability and Logic, fifth edition*.
