@@ -8,12 +8,6 @@ from collections import deque
 
 class UTM:
     def __init__(self, program = "test.tm", tape = "test.tape"):
-        self.instructions = {
-            "0": self.zero,
-            "1": self.stroke,
-            "L": self.left,
-            "R": self.right
-        }
         self.UTM_compile(program)
         self.state = 1
         
@@ -62,6 +56,13 @@ class UTM:
     def stroke(self): self.tape[self.cursor] = 1
     def left(self): self.cursor -= 1
     def right(self): self.cursor += 1
+	
+	self.instructions = {
+            "0": self.zero,
+            "1": self.stroke,
+            "L": self.left,
+            "R": self.right
+        }
         
 if __name__ == "__main__":
     utm = UTM()
