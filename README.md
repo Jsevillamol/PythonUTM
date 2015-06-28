@@ -44,5 +44,12 @@ The machine is considered to have made a concrete output when it finishes in a v
 1. The cursor is over the left-most 1.
 2. Every number in the output is expressed in monadic notation separated by blanks.
 
+###Subroutines
+If instead of a valid instruction you specify a program file, it will be compiled and executed once the instruction is reach.
+Example: `1 1 write3.tm 2`.
+
+Once the subroutine finishes, the main program will continue its normal execution.
+It is possible to call subroutines inside subroutines. Beware recursion.
+
 #References
 * Boolos G, Burges J, Jeffrey R. *Computability and Logic, fifth edition*.
