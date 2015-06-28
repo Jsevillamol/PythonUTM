@@ -11,7 +11,7 @@ class UTM:
         self.UTM_compile(program)
         self.state = 1
         
-        self.tape = deque([1,1,0,1,1,1]) #Todo: load tape
+        self.tape = deque([1,0,1,1,1]) #Todo: load tape
         self.cursor = 0
         self.run()
     
@@ -33,7 +33,7 @@ class UTM:
     def do(self):
         if self.cursor < 0: raise IndexError
         instruction = self.program[self.state][self.tape[self.cursor]]
-        instruction["instruction"]()
+        instruction["instruction"](self)
         self.state = instruction["next_state"]
     
     def UTM_compile(self,filename):
@@ -57,12 +57,12 @@ class UTM:
     def left(self): self.cursor -= 1
     def right(self): self.cursor += 1
 	
-	self.instructions = {
-            "0": self.zero,
-            "1": self.stroke,
-            "L": self.left,
-            "R": self.right
-        }
+    instructions = {
+         "0": zero,
+         "1": stroke,
+         "L": left,
+         "R": right
+    }
         
 if __name__ == "__main__":
-    utm = UTM()
+    utm = UTM("move_right.tm")
