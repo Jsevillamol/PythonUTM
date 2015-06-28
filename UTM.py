@@ -7,24 +7,27 @@ Created on Mon Jun 22 20:17:12 2015
 from collections import deque
 
 class UTM:
-    def __init__(self, program = "test.tm", tape = "test.tape"):
+    def __init__(self, program = "test.tm", tape = deque([0,0,0]), 
+                 cursor = 0, state = 1):
         self.UTM_compile(program)
-        self.state = 1
+        self.state = state
         
-        self.tape = deque([1,0,1,1,1]) #Todo: load tape
-        self.cursor = 0
+        self.tape = tape #Todo: load tape
+        self.cursor = cursor
         self.run()
     
     def run(self):
-        print(self.tape)
+        print(self.tape, "cursor:", self.cursor, "state:", self.state)
         self.halted = False
         while(not self.halted):
             try:
                 self.do()
-                print(self.tape)
+                print(self.tape, "cursor:", self.cursor, "state:", self.state) #Todo: show cursor
             except IndexError:
                 print("Enlarging tape...")
-                if self.cursor < 0: self.tape.appendleft(0)
+                if self.cursor < 0: 
+                    self.tape.appendleft(0)
+                    self.cursor = 0
                 elif self.cursor >= len(self.tape): self.tape.append(0)
             except KeyError:
                 print("Finished")
@@ -33,7 +36,10 @@ class UTM:
     def do(self):
         if self.cursor < 0: raise IndexError
         instruction = self.program[self.state][self.tape[self.cursor]]
-        instruction["instruction"](self)
+        try:
+            instruction["instruction"](self)
+        except TypeError:
+            self.call(instruction["instruction"])
         self.state = instruction["next_state"]
     
     def UTM_compile(self,filename):
@@ -43,14 +49,24 @@ class UTM:
                 instruction = instruction.split()
                 if not int(instruction[0]) in self.program:
                     self.program[int(instruction[0])] = {}
-                self.program[int(instruction[0])].update(
-                        {int(instruction[1]):
-                            {"instruction": self.instructions[
-                                instruction[2]],
-                             "next_state": int(instruction[3])
+                
+                try:
+                    self.program[int(instruction[0])].update(
+                            {int(instruction[1]):
+                                {"instruction": self.instructions[
+                                    instruction[2]],
+                                 "next_state": int(instruction[3])
+                                }
                             }
-                        }
-                    )
+                        )
+                except KeyError:
+                    self.program[int(instruction[0])].update(
+                            {int(instruction[1]):
+                                {"instruction": instruction[2],
+                                 "next_state": int(instruction[3])
+                                }
+                            }
+                        )
         
     def zero(self): self.tape[self.cursor] = 0
     def stroke(self): self.tape[self.cursor] = 1
@@ -63,6 +79,12 @@ class UTM:
          "L": left,
          "R": right
     }
+    
+    def call(self, program):
+        print("Calling subprogram", program)
+        subroutine = UTM(program, self.tape, self.cursor)
+        self.tape = subroutine.tape
+        self.cursor = subroutine.cursor
         
 if __name__ == "__main__":
-    utm = UTM("move_right.tm")
+    utm = UTM("subroutine_test.tm")
